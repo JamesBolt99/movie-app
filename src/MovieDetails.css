@@ -1,0 +1,104 @@
+.grid-containerD {
+    background-color: black;
+    border: 500px white;
+    top: 40vw;
+    position: relative;
+    color: white;
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: 1fr max-content max-content max-content ;
+    gap: 0px 0px;
+    grid-template-areas: ". TopD ." ". DescD ." ". CastD ." ". VidsD .";
+}
+
+.BackDrop {
+    align-self: center;
+    height: 56vw;
+    position: absolute;
+    left: 0vw;
+    top: 15vw;
+    opacity: 0.5;
+}
+
+.TopD {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content 5vw max-content;
+    gap: 0px 0px;
+    grid-template-areas: "PosterD TitleD" "PosterD ReleaseD" "PosterD GenreD";
+    grid-area: TopD;
+    align-content: center;
+}
+
+.TitleD {
+    font-weight: 700;
+    grid-area: TitleD;
+    font-size: 7vw;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-overflow: ellipsis;
+}
+
+.ReleaseD {
+    grid-area: ReleaseD;
+    font-size: 4vw;
+}
+
+.PosterD {
+    grid-area: PosterD;
+    height: 35vw;
+    width: 30vw;
+}
+
+.Poster {
+    position: relative;
+    top: -20vw;
+    left: 5vw;
+    grid-area: PosterD;
+    height: 50vw;
+}
+
+.GenreD {
+    grid-area: GenreD;
+    font-size: 3vw;
+}
+
+.DescD {
+    grid-area: DescD;
+    margin-bottom: 2vw;
+}
+
+.CastD {
+    grid-area: CastD;
+    display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: 15vw 15vw;
+  gap: 25vw 1vw;
+  grid-template-areas:
+    ". ActorD ."
+    ". CharacterD ."
+    ". ActorPicD .";
+}
+
+.VidsD {
+    border: 1px white;
+    font-weight: 500;
+    grid-area: VidsD;
+    font-size: 5vw;
+}
+.Vid {
+    margin-bottom: 5vw;
+}
+.ActorD{
+    font-weight: 600;
+    font-size: 3vw;
+    grid-area: ActorD;
+}
+.CharacterD{
+    grid-area: CharacterD;
+    font-size: 2vw;
+}
+.ActorPicD{
+    grid-area: ActorPicD;
+    height: 30vw;
+}

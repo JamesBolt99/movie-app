@@ -1,0 +1,119 @@
+.App {
+  text-align: center;
+  background-color: black;
+}
+body{
+  background-color: black;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+
+}
+
+.App-link {
+  color: #61dafb;
+}
+.grid-container {
+  align-content: center;
+  color: white;
+  display: grid;
+  grid-template-columns: 1% auto 1%;
+  grid-template-rows: 5% 30px max-content max-content max-content max-content max-content max-content;
+  gap: 0px 20px;
+  grid-template-areas:
+  ". . ."
+    ". Search ."
+    ". Video ."
+    ". Title ."
+    ". Rating ."
+    ". Genre ."
+    ". Cast ."
+    ". Rate .";
+}
+
+.Search { 
+  grid-area: Search; 
+  background-color: grey;
+}
+.Title{
+  grid-area: Title;
+  font-size: 5vw;
+  font-weight: 700;
+}
+
+.Cast {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: 15% auto;
+  gap: 30px 0px;
+  grid-template-areas:
+    ". Actor ."
+    ". Pic1 .";
+  grid-area: Cast;
+}
+
+.Video { 
+  grid-area: Video;
+  margin-left: auto;
+  margin-right: auto; 
+}
+.Rating {
+  grid-area: Rating;
+  font-size: 3vw;
+}
+.Genre { 
+  grid-area: Genre;
+}
+.Rate {
+  display: grid;
+  grid-template-columns: 10% 40% 40% 10%;
+  grid-template-rows: auto;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". Like Dislike .";
+    grid-area: Rate;
+  align-content: center;
+}
+.Like { 
+  margin-left: auto;
+  margin-right: auto;
+  grid-area: Like;
+  width: 15vw;
+  height: 15vw;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 100px;
+}
+.Dislike {
+  margin-left: auto;
+  margin-right: auto;
+  grid-area: Dislike;
+  width: 15vw;
+  height: 15vw;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 100px;
+}
+.LikeImg {
+  width: 10vw;
+  height: 10vw;
+}
+.Actor { 
+  grid-area: Actor1;
+}
+.Pic1 { 
+  grid-area: Pic1;
+  height: 20vw;
+}

@@ -1,0 +1,89 @@
+.BttnHolder{
+    position: relative;
+    margin-left: 5vw;
+    float: left;
+    height: 10vw;
+}
+.PageTitle{
+
+}
+.Bttn {
+    background-color: transparent;
+    border: transparent;
+    float: left;
+    padding-top: 2vw;
+}
+.BttnImg{
+    height: 10vw;
+}
+.Icon{
+    width: 6vw;
+}
+.navbar {
+    background-color: #262626;
+    height: 15vw ;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.menu-bars{
+    
+    margin-left: 1vw;
+    font-size: 2rem;
+    background: none;
+    
+}
+.nav-menu{
+    display: block;
+    background-color: #262626;
+    width: 40vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position:fixed;
+    top: 0;
+    left: -100%;
+    transition: 850ms;
+    z-index: 1;
+}
+.nav-menu.active {
+    
+    left:0;
+    transition: 350ms;
+}
+.nav-text{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 1vw 0px 1vw 1vw;
+    list-style: none;
+    height: 10vw;
+}
+.nav-text a{
+    text-decoration: none;
+    color: white;
+    font-size: 5vw;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+}
+.nav-text a:hover{
+    background-color: #595959;
+}
+.nav-menu-items{
+    width: 90%;
+    padding-inline-start: 0px;
+}
+.navbar-toggle{
+    background-color: #262626;
+    width: 100%;
+    height: 10vw;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+span {
+    margin-left: 16px;
+}

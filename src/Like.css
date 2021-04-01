@@ -1,0 +1,61 @@
+.App{
+  text-align: center;
+  background: black;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+.grid-containerLike {
+    color: white;
+    display: grid;
+    grid-template-columns: 5vw 80vw 10vw 5vw;
+    grid-template-rows: max-content;
+    align-content: center;
+    gap: 0px 1vw;
+    margin-bottom: 2vw;
+    grid-template-areas:
+      ". Movie Del .";
+  }
+  .Movie {
+    text-decoration: none;
+    color: white;
+    border: 1px solid white;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: max-content max-content 1fr;
+    gap: 0.4vw 0px;
+    grid-template-areas:
+      "Poster Title"
+      "Poster Genre"
+      "Poster Desc";
+    grid-area: Movie;
+  }
+  .Del {
+      grid-area: Del;
+      color: white;
+      background-color: transparent;
+  }
+  .TitleL { 
+      grid-area: Title;
+      font-weight: 800; 
+      font-size: 7vw;
+    }
+  .GenreL { 
+      grid-area: Genre; 
+      font-weight: 100;
+      font-size: 3vw;
+    }
+  .DescL {
+       grid-area: Desc; 
+       font-size: 3vw;
+    }
+  .PosterL { 
+      grid-area: Poster; 
+      width: 30vw;
+}

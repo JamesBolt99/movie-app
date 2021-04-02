@@ -1,15 +1,8 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Nav.css";
-import Like from "./Like";
-import Movie from "./Movie";
 import Menu from "./Img/menu.png";
 import Cancel from "./Img/cancel.png";
-import { Component, useState } from "react";
+import { useState } from "react";
 import { SidebarData } from "./NavData";
 
 function Nav() {

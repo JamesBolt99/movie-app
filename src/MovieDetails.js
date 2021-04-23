@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./MovieDetails.css";
 import Moment from "moment";
 import ReactPlayer from "react-player";
+import { Link } from "react-router-dom";
+import Netflix from "./Img/netflix.jpg";
 
 class MovieDetails extends Component {
   constructor(props) {
@@ -12,6 +14,21 @@ class MovieDetails extends Component {
       Genres: [],
       Trailer: [],
       Cast: [],
+      StreamAvailable: false,
+      Availability: [],
+      StreamName: [],
+      StreamLogoId: [],
+      Provider: [
+        {
+          title: "hbo",
+        },
+        {
+          title: "netflix",
+          icon: <img src={Netflix} className="StreamIcon" />,
+          cName: "Provider",
+        },
+        { title: "hulu" },
+      ],
     };
     this.GetImage = this.GetImage.bind(this);
   }
@@ -35,6 +52,7 @@ class MovieDetails extends Component {
     });
     this.TrailerAPI();
     this.CastAPI();
+    this.StreamingAPI();
 
     // this.state.Actors.map((e, i) => {
     //   this.ActorsAPI(i, e);
@@ -82,20 +100,63 @@ class MovieDetails extends Component {
   GetImage(Location) {
     return "https://image.tmdb.org/t/p/w500" + Location;
   }
-  //   async ActorsAPI(i, Actor) {
-  //     const url =
-  //       "http://api.tvmaze.com/search/people?q=" +
-  //       encodeURI(this.state.Actors[i]);
-  //     const response = await fetch(url);
-  //     const data = await response.json();
-  //     if (data[0] !== undefined && data[0].person.image !== null) {
-  //       const newPics = {
-  //         Actors: Actor,
-  //         image: data[0].person.image.original,
-  //       };
-  //       this.setState({ Pics: [...this.state.Pics, newPics] });
-  //     }
-  //   }
+  async StreamingAPI() {
+    const key = "c34103da5fd71089818f7dce45ac6a4f";
+    const url =
+      "https://api.themoviedb.org/3/movie/" +
+      this.state.MovieId +
+      "/watch/providers?api_key=" +
+      key;
+    const response = await fetch(url);
+    const dataLogo = await response.json();
+    console.log(dataLogo);
+    this.setState({ Streaming: dataLogo.results.GB });
+    if (this.state.Streaming.flatrate) {
+      this.AvailabilityAPI();
+      console.log("Stream Available");
+      this.setState({ StreamAvailable: true });
+    }
+  }
+  async AvailabilityAPI() {
+    const key = "fba4379aabmsh64f5ae2494b6f75p149425jsn3c97e516d150";
+    const url =
+      "https://streaming-availability.p.rapidapi.com/get/basic?rapidapi-key=" +
+      key +
+      "&country=gb&tmdb_id=movie%2F" +
+      this.state.MovieId;
+    const response = await fetch(url);
+    const data = await response.json();
+    this.setState({ Availability: [data.streamingInfo] });
+    // this.setState({
+    //   Availability: [
+    //     {
+    //       netflix: {
+    //         gb: {
+    //           link: "https://www.netflix.com/title/81194641/",
+    //           added: 1602031625,
+    //           leaving: 0,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // });
+    for (let i = 0; i < this.state.Availability.length; i++) {
+      const StreamString = JSON.stringify(this.state.Availability[i]).split(
+        '"'
+      );
+
+      console.log(StreamString);
+      const Logo = this.state.Provider.findIndex(
+        (element) => element.title === StreamString[1]
+      );
+      console.log(Logo);
+      this.setState({
+        StreamName: [...this.state.StreamName, StreamString[1]],
+        StreamLogoId: [...this.state.StreamLogoId, Logo],
+      });
+      console.log(this.state.StreamName);
+    }
+  }
 
   render() {
     return (
@@ -127,7 +188,7 @@ class MovieDetails extends Component {
           <div className="CastD">
             {this.state.Cast.map((item, i) => {
               return (
-                <div>
+                <Link to={"/People/" + item.id} className="LinkDecor">
                   <div className="ActorD">{item.name}</div>
                   <div className="CharacterD">{item.character}</div>
                   {item.profile_path ? (
@@ -138,10 +199,31 @@ class MovieDetails extends Component {
                   ) : (
                     "No Image"
                   )}
-                </div>
+                </Link>
               );
             })}
           </div>
+          {/* <div className="Streaming">
+            {this.state.StreamAvailable
+              ? this.state.Availability.map((item, i) => {
+                  return (
+                    <a
+                      href={
+                        this.state.Availability[i][this.state.StreamName[i]].gb
+                          .link
+                      }
+                    >
+                      <div className="StreamName">
+                        {this.state.StreamName[i]}
+                      </div>
+                      <div className="StreamLogo">
+                        {this.state.Provider[this.state.StreamLogoId].icon}
+                      </div>
+                    </a>
+                  );
+                })
+              : "No"}
+          </div> */}
           <div className="VidsD">
             {this.state.Trailer.map((item, i) => {
               return (

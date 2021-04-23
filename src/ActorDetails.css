@@ -1,0 +1,63 @@
+.grid-containerActor {
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: 50vw 10vw 1fr;
+    gap: 0px 0px;
+    color: white;
+    grid-template-areas: ". Pic ." ". ActorName ." ". Bio .";
+}
+
+.Pic {
+    grid-area: Pic;
+}
+
+.ActorImg {
+    height: 60vw;
+}
+
+.ActorName {
+    grid-area: ActorName;
+    font-weight: 700;
+    font-size: 8vw;
+}
+
+.Bio {
+    grid-area: Bio;
+    font-size: 3vw;
+}
+
+.grid-containerActorFilms{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 50vw auto auto;
+    gap: 5vw 1vw;
+    color: white;
+    grid-template-areas: ". Film ." ". Character ." ". Pic .";
+    text-decoration: none;
+}
+.LinkDecor{
+    text-decoration: solid;
+    color: white;
+}
+.grid-containerActorFilms a{
+    text-decoration: none;
+}
+
+.Film{
+    grid-area: Film;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.Character{
+    grid-area: Character;
+    font-size: 3vw;
+    font-weight: 300;
+}
+
+.Pic {
+    grid-area: Pic;
+}
+.MoviePoster{
+    height: 40vw;
+}

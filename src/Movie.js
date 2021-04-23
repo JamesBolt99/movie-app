@@ -3,19 +3,42 @@ import React, { Component } from "react";
 import ReactPlayer from "react-player";
 import like from "./Img/like.png";
 import dislike from "./Img/dislike.png";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       Movie: {},
-      RandomMovie: {},
       Trailer: [],
       Ratings: [],
-      Actors: [],
+      Cast: [],
       Pics: [],
       Like: [],
       imdbID: [],
+      removeId: [],
+      Genre: [
+        { id: 28, name: "Action" },
+        { id: 12, name: "Adventure" },
+        { id: 16, name: "Animation" },
+        { id: 35, name: "Comedy" },
+        { id: 80, name: "Crime" },
+        { id: 99, name: "Documentary" },
+        { id: 18, name: "Drama" },
+        { id: 10751, name: "Family" },
+        { id: 14, name: "Fantasy" },
+        { id: 36, name: "History" },
+        { id: 27, name: "Horror" },
+        { id: 10402, name: "Music" },
+        { id: 9648, name: "Mystery" },
+        { id: 10749, name: "Romance" },
+        { id: 878, name: "Science Fiction" },
+        { id: 10770, name: "TV Movie" },
+        { id: 53, name: "Thriller" },
+        { id: 10752, name: "War" },
+        { id: 37, name: "Western" },
+      ],
+      GenreName: [],
     };
   }
   GetRand(min, max) {
@@ -29,68 +52,63 @@ class Home extends Component {
       console.log("Save this:", updatedStateString);
       localStorage.setItem("Like", updatedStateString);
     }
+    const prevStateStringMovie = JSON.stringify(prevState.removeId);
+    const updatedStateStringMovie = JSON.stringify(this.state.removeId);
+
+    if (prevStateStringMovie !== updatedStateStringMovie) {
+      console.log("Save this:", updatedStateStringMovie);
+      localStorage.setItem("RemovedMovie", updatedStateStringMovie);
+    }
   }
   async componentDidMount() {
-    this.updateListing();
     const savedStateFromLocalStorage = localStorage.getItem("Like");
     if (savedStateFromLocalStorage) {
       this.setState({
         Like: JSON.parse(savedStateFromLocalStorage),
       });
     }
+    const savedMoviesFromLocalStorage = localStorage.getItem("RemovedMovie");
+    if (savedMoviesFromLocalStorage) {
+      this.setState({
+        removeId: JSON.parse(savedMoviesFromLocalStorage),
+      });
+    }
+    this.updateListing();
   }
 
   async updateListing() {
     const randomUrl =
-      "https://api.themoviedb.org/3/movie/popular?api_key=c34103da5fd71089818f7dce45ac6a4f&language=en-US&page=" +
+      "https://api.themoviedb.org/3/movie/popular?api_key=c34103da5fd71089818f7dce45ac6a4f&language=en-GB&page=" +
       this.GetRand(1, 4);
     const responseRand = await fetch(randomUrl);
     const randomdata = await responseRand.json();
     console.log(randomdata);
-    this.setState({ RandomMovie: randomdata.results[this.GetRand(0, 20)] });
-    console.log(this.state.RandomMovie);
-    this.setState({
-      Pics: [],
-      Trailer: [],
-    });
-    this.OMDbApi();
-  }
-
-  async OMDbApi() {
-    const url =
-      "http://www.omdbapi.com/?t=" +
-      encodeURI(this.state.RandomMovie.title) +
-      "&apikey=edc5e05e";
-    console.log(url);
-    const response = await fetch(url);
-    const data = await response.json();
-    this.setState({
-      Movie: data,
-
-      imdbID: data.imdbID,
-    });
-    if (data.Ratings !== undefined) {
-      this.setState({ Ratings: data.Ratings });
-    }
-    console.log(this.state.Ratings);
-    if (this.state.Movie.Actors !== undefined) {
-      this.setState({ Actors: this.state.Movie.Actors.split(", ") });
-      console.log("Actors: " + this.state.Actors[2]);
-    }
+    this.setState({ Movie: randomdata.results[this.GetRand(0, 20)] });
     console.log(this.state.Movie);
-    this.TrailerAPI();
-    this.state.Actors.map((e, i) => {
-      this.ActorsAPI(i, e);
-    });
+    if (
+      this.state.removeId.includes(this.state.Movie.id) ||
+      this.state.Movie === null
+    ) {
+      this.updateListing();
+    } else {
+      this.setState({
+        Cast: [],
+        Trailer: [],
+        GenreName: [],
+      });
+      this.TrailerAPI();
+      this.CastAPI();
+      this.GenreAPI();
+    }
   }
   async TrailerAPI() {
     const key = "c34103da5fd71089818f7dce45ac6a4f";
     const url =
       "https://api.themoviedb.org/3/movie/" +
-      this.state.Movie.imdbID +
+      this.state.Movie.id +
       "/videos?api_key=" +
       key +
-      "&language=en-US";
+      "&language=en-GB";
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
@@ -104,40 +122,70 @@ class Home extends Component {
 
     console.log(this.state.Trailer);
   }
-  async ActorsAPI(i, Actor) {
+  async CastAPI() {
+    const key = "c34103da5fd71089818f7dce45ac6a4f";
     const url =
-      "http://api.tvmaze.com/search/people?q=" +
-      encodeURI(this.state.Actors[i]);
+      "https://api.themoviedb.org/3/movie/" +
+      this.state.Movie.id +
+      "/credits?api_key=" +
+      key +
+      "&language=en-GB";
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
-    if (data[0] !== undefined && data[0].person.image !== null) {
-      const newPics = {
-        Actors: Actor,
-        image: data[0].person.image.original,
-      };
-      this.setState({ Pics: [...this.state.Pics, newPics] });
+    console.log(data);
+    for (var i = 0; i < 8; i++) {
+      const newCast = data.cast[i];
+      this.setState({ Cast: [...this.state.Cast, newCast] });
+    }
+    console.log(this.state.Cast);
+  }
+  async GenreAPI() {
+    for (let i = 0; i < this.state.Movie.genre_ids.length; i++) {
+      const Genre = this.state.Genre.findIndex(
+        (element) => element.id === this.state.Movie.genre_ids[i]
+      );
+      console.log(Genre);
+      this.setState({
+        GenreName: [...this.state.GenreName, this.state.Genre[Genre].name],
+      });
+      // const Logo = this.state.Provider.findIndex(
+      //   (element) => element.title === StreamString[1]
+      // );
+      // console.log(Logo);
+      // this.setState({
+      //   StreamName: [...this.state.StreamName, StreamString[1]],
+      //   StreamLogoId: [...this.state.StreamLogoId, Logo],
+      // });
+      // console.log(this.state.StreamName);
     }
   }
+
   likeMove() {
     const { Like } = this.state;
     const newLike = {
-      id: this.state.RandomMovie.id,
-      Name: this.state.Movie.Title,
-      Genre: this.state.Movie.Genre,
-      Desc: this.state.Movie.Plot,
-      Image: this.state.Movie.Poster,
+      id: this.state.Movie.id,
     };
     const existedItem = Like.find((liked) => liked.id === newLike.id);
     if (existedItem) {
       console.log(newLike.id + ": Duplicate");
-      this.updateListing();
+      this.removeMovie();
     } else {
       this.setState({
         Like: [...this.state.Like, newLike],
       });
       console.log("not Duplicate");
-      this.updateListing();
+      this.removeMovie();
     }
+  }
+  removeMovie() {
+    const { Movie } = this.state;
+    const newRemove = Movie.id;
+    this.setState({ removeId: [...this.state.removeId, newRemove] });
+    this.updateListing();
+  }
+  GetImage(Location) {
+    return "https://image.tmdb.org/t/p/w500" + Location;
   }
 
   render() {
@@ -153,23 +201,30 @@ class Home extends Component {
               playing={true}
             />
           </div>
-          <div className="Title">{this.state.Movie.Title}</div>
-          <div className="Rating">
-            {this.state.Ratings.map((item) => {
-              return (
-                <div>
-                  {item.Source}: {item.Value}
-                </div>
-              );
+          <div className="Title">
+            <Link to={"/Info/" + this.state.Movie.id} className="LinkDecor">
+              {this.state.Movie.title}
+            </Link>
+          </div>
+          <div className="Rating"></div>
+          <div className="Genre">
+            {this.state.GenreName.map((item) => {
+              return <div>{item}</div>;
             })}
           </div>
-          <div className="Genre">{this.state.Movie.Genre}</div>
           <div className="Cast">
-            {this.state.Pics.map((item) => {
+            {this.state.Cast.map((item) => {
               return (
                 <div>
-                  <div className="Actor">{item.Actors}</div>
-                  <img className="Pic1" src={item.image} />
+                  <div className="Actor">{item.name}</div>
+                  {item.profile_path ? (
+                    <img
+                      className="Pic1"
+                      src={this.GetImage(item.profile_path)}
+                    />
+                  ) : (
+                    "No Image"
+                  )}
                 </div>
               );
             })}
@@ -178,7 +233,7 @@ class Home extends Component {
             <button className="Like" onClick={() => this.likeMove()}>
               <img className="LikeImg" src={like} />
             </button>
-            <button className="Dislike" onClick={() => this.updateListing()}>
+            <button className="Dislike" onClick={() => this.removeMovie()}>
               <img className="LikeImg" src={dislike} />
             </button>
           </div>

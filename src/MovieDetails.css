@@ -6,9 +6,9 @@
     color: white;
     display: grid;
     grid-template-columns: 5vw 90vw 5vw;
-    grid-template-rows: 1fr max-content max-content max-content ;
+    grid-template-rows: 1fr max-content max-content max-content max-content;
     gap: 0px 0px;
-    grid-template-areas: ". TopD ." ". DescD ." ". CastD ." ". VidsD .";
+    grid-template-areas: ". TopD ." ". DescD ." ". CastD ." ". Streaming . "". VidsD .";
 }
 
 .BackDrop {
@@ -71,34 +71,56 @@
 .CastD {
     grid-area: CastD;
     display: grid;
-  grid-template-columns: auto auto auto auto;
-  grid-template-rows: 15vw 15vw;
-  gap: 25vw 1vw;
-  grid-template-areas:
-    ". ActorD ."
-    ". CharacterD ."
-    ". ActorPicD .";
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: 15vw 15vw;
+    gap: 25vw 1vw;
+    grid-template-areas: ". ActorD ." ". CharacterD ." ". ActorPicD .";
 }
+.Streaming {
+    grid-area: Streaming;
+    display: grid;
+    grid-template-columns: 10% 1fr 10%;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      ". StreamName ."
+      ". StreamLogo .";
+  }
+  
+  .StreamName { grid-area: StreamName; }
+  
+  .StreamLogo { grid-area: StreamLogo;       border-radius: 20;
+      border-color: white;}
 
+  .StreamIcon{
+      height: 30vw;
+      position: relative;
+
+  }
+  
 .VidsD {
     border: 1px white;
     font-weight: 500;
     grid-area: VidsD;
     font-size: 5vw;
 }
+
 .Vid {
     margin-bottom: 5vw;
 }
-.ActorD{
+
+.ActorD {
     font-weight: 600;
     font-size: 3vw;
     grid-area: ActorD;
 }
-.CharacterD{
+
+.CharacterD {
     grid-area: CharacterD;
     font-size: 2vw;
 }
-.ActorPicD{
+
+.ActorPicD {
     grid-area: ActorPicD;
     height: 30vw;
 }

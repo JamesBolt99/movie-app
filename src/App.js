@@ -9,6 +9,7 @@ import Like from "./Like";
 import Movie from "./Movie";
 import Nav from "./Nav";
 import MovieDetails from "./MovieDetails";
+import ActorDetails from "./ActorDetails";
 function App() {
   return (
     <div className="App">
@@ -68,8 +69,18 @@ function App() {
               return (
                 <div>
                   <Nav PageTitle="Info" />
-
                   <MovieDetails />
+                </div>
+              );
+            }}
+          />
+          <Route
+            path="/People/:ActorId"
+            render={() => {
+              return (
+                <div>
+                  <Nav PageTitle="Actor" />
+                  <ActorDetails />
                 </div>
               );
             }}

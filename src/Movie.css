@@ -29,7 +29,7 @@ body{
   align-content: center;
   color: white;
   display: grid;
-  grid-template-columns: 1% auto 1%;
+  grid-template-columns: 1vw auto 1vw;
   grid-template-rows: 5% 30px max-content max-content max-content max-content max-content max-content;
   gap: 0px 20px;
   grid-template-areas:
@@ -55,9 +55,9 @@ body{
 
 .Cast {
   display: grid;
-  grid-template-columns: auto auto auto auto;
-  grid-template-rows: 15% auto;
-  gap: 30px 0px;
+  grid-template-columns: auto auto auto auto ;
+  grid-template-rows: max-content max-content;
+  gap: vw 0px;
   grid-template-areas:
     ". Actor ."
     ". Pic1 .";
@@ -115,5 +115,5 @@ body{
 }
 .Pic1 { 
   grid-area: Pic1;
-  height: 20vw;
+  height: 22vw;
 }

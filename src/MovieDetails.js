@@ -276,27 +276,7 @@ class MovieDetails extends Component {
               );
             })}
           </div>
-          {/* <div className="Streaming">
-            {this.state.StreamAvailable
-              ? this.state.Availability.map((item, i) => {
-                  return (
-                    <a
-                      href={
-                        this.state.Availability[i][this.state.StreamName[i]].gb
-                          .link
-                      }
-                    >
-                      <div className="StreamName">
-                        {this.state.StreamName[i]}
-                      </div>
-                      <div className="StreamLogo">
-                        {this.state.Provider[this.state.StreamLogoId].icon}
-                      </div>
-                    </a>
-                  );
-                })
-              : "No"}
-          </div> */}
+
           <div className="VidsD">
             {this.state.Trailer.map((item, i) => {
               return (

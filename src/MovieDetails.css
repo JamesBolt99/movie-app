@@ -6,9 +6,9 @@
     color: white;
     display: grid;
     grid-template-columns: 5vw 90vw 5vw;
-    grid-template-rows: 1fr max-content max-content max-content max-content;
+    grid-template-rows: 1fr max-content max-content max-content max-content max-content;
     gap: 0px 0px;
-    grid-template-areas: ". TopD ." ". DescD ." ". CastD ." ". Streaming . "". VidsD .";
+    grid-template-areas: ". TopD ." ". DescD ." ". LikeDets ." ". Streaming ." ". CastD . "". VidsD .";
 }
 
 .BackDrop {
@@ -67,6 +67,9 @@
     grid-area: DescD;
     margin-bottom: 2vw;
 }
+.LikeDets{
+    grid-area: LikeDets;
+}
 
 .CastD {
     grid-area: CastD;
@@ -78,25 +81,18 @@
 }
 .Streaming {
     grid-area: Streaming;
-    display: grid;
-    grid-template-columns: 10% 1fr 10%;
-    grid-template-rows: 1fr 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      ". StreamName ."
-      ". StreamLogo .";
+    margin-top: 1vw;
+    margin-bottom: 5vw;
+    
   }
-  
-  .StreamName { grid-area: StreamName; }
-  
-  .StreamLogo { grid-area: StreamLogo;       border-radius: 20;
-      border-color: white;}
+.StreamingLink{
+    font-size: 3vw;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 10px solid white;
+}
 
-  .StreamIcon{
-      height: 30vw;
-      position: relative;
-
-  }
   
 .VidsD {
     border: 1px white;

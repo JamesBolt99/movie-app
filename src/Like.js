@@ -9,6 +9,7 @@ class Like extends Component {
       Like: [],
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.GetImage = this.GetImage.bind(this);
   }
   componentDidUpdate(prevProps, prevState) {
     const prevStateString = JSON.stringify(prevState.Like);
@@ -44,6 +45,9 @@ class Like extends Component {
     const { Like } = this.state;
     <Route path={"/" + Like[i].id} />;
   }
+  GetImage(Location) {
+    return "https://image.tmdb.org/t/p/w500" + Location;
+  }
   render() {
     return (
       <div className="App">
@@ -58,9 +62,8 @@ class Like extends Component {
                       onClick={() => this.handleDetails(i)}
                     >
                       <div class="TitleL">{item.Name}</div>
-                      <div class="GenreL">{item.Genre}</div>
                       <div class="DescL">{item.Desc}</div>
-                      <img class="PosterL" src={item.Image} />
+                      <img class="PosterL" src={this.GetImage(item.Image)} />
                     </Link>
                     <button
                       className="Del"

@@ -30,13 +30,14 @@ body{
   color: white;
   display: grid;
   grid-template-columns: 1vw auto 1vw;
-  grid-template-rows: 5% 30px max-content max-content max-content max-content max-content max-content;
+  grid-template-rows: 5%  max-content max-content max-content max-content max-content max-content;
   gap: 0px 20px;
   grid-template-areas:
   ". . ."
-    ". Search ."
-    ". Video ."
+    /* ". Search ." */
     ". Title ."
+    ". Video ."
+    
     ". Rating ."
     ". Genre ."
     ". Cast ."
@@ -116,4 +117,18 @@ body{
 .Pic1 { 
   grid-area: Pic1;
   height: 22vw;
+}
+.SwipeImageL{
+  display: block;
+  height: 50vw;
+  left: 50vw;
+  position: absolute;
+  top: 60vw;
+}
+.SwipeImageR{
+  display: block;
+  height: 50vw;
+  position: absolute;
+  left: 5vw;
+  top: 60vw;
 }

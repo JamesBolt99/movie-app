@@ -4,6 +4,7 @@ import Moment from "moment";
 import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
 import Netflix from "./Img/netflix.jpg";
+import like from "./Img/like.png";
 
 class MovieDetails extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class MovieDetails extends Component {
       Availability: [],
       StreamName: [],
       StreamLogoId: [],
+      StreamLink: [],
       Provider: [
         {
           title: "hbo",
@@ -28,12 +30,36 @@ class MovieDetails extends Component {
           cName: "Provider",
         },
         { title: "hulu" },
+        {
+          title: "disney",
+          icon: <img src={Netflix} className="StreamIcon" />,
+        },
       ],
+      Like: JSON.parse(localStorage.getItem("Like")),
+      removeId: JSON.parse(localStorage.getItem("RemovedMovie")),
+      Liked: "",
     };
     this.GetImage = this.GetImage.bind(this);
   }
-  componentDidMount() {
+  async componentDidMount() {
     this.MovieApi();
+    this.checkLike(this.state.MovieId);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const prevStateString = JSON.stringify(prevState.Like);
+    const updatedStateString = JSON.stringify(this.state.Like);
+
+    if (prevStateString !== updatedStateString) {
+      console.log("Save this:", updatedStateString);
+      localStorage.setItem("Like", updatedStateString);
+    }
+    const prevStateStringMovie = JSON.stringify(prevState.removeId);
+    const updatedStateStringMovie = JSON.stringify(this.state.removeId);
+
+    if (prevStateStringMovie !== updatedStateStringMovie) {
+      console.log("Save this:", updatedStateStringMovie);
+      localStorage.setItem("RemovedMovie", updatedStateStringMovie);
+    }
   }
   async MovieApi() {
     const key = "c34103da5fd71089818f7dce45ac6a4f";
@@ -111,10 +137,12 @@ class MovieDetails extends Component {
     const dataLogo = await response.json();
     console.log(dataLogo);
     this.setState({ Streaming: dataLogo.results.GB });
-    if (this.state.Streaming.flatrate) {
-      this.AvailabilityAPI();
-      console.log("Stream Available");
-      this.setState({ StreamAvailable: true });
+    if (this.state.streaming !== undefined) {
+      if (this.state.Streaming.flatrate) {
+        this.AvailabilityAPI();
+        console.log("Stream Available");
+        this.setState({ StreamAvailable: true });
+      }
     }
   }
   async AvailabilityAPI() {
@@ -127,19 +155,6 @@ class MovieDetails extends Component {
     const response = await fetch(url);
     const data = await response.json();
     this.setState({ Availability: [data.streamingInfo] });
-    // this.setState({
-    //   Availability: [
-    //     {
-    //       netflix: {
-    //         gb: {
-    //           link: "https://www.netflix.com/title/81194641/",
-    //           added: 1602031625,
-    //           leaving: 0,
-    //         },
-    //       },
-    //     },
-    //   ],
-    // });
     for (let i = 0; i < this.state.Availability.length; i++) {
       const StreamString = JSON.stringify(this.state.Availability[i]).split(
         '"'
@@ -153,9 +168,49 @@ class MovieDetails extends Component {
       this.setState({
         StreamName: [...this.state.StreamName, StreamString[1]],
         StreamLogoId: [...this.state.StreamLogoId, Logo],
+        StreamLink: [...this.state.StreamLink, StreamString[7]],
       });
       console.log(this.state.StreamName);
+      console.log(this.state.StreamLink);
     }
+  }
+  likeMovie() {
+    const { Like } = this.state;
+    const newLike = {
+      id: this.state.Movie.id,
+      Name: this.state.Movie.title,
+      Desc: this.state.Movie.overview,
+      Image: this.state.Movie.poster_path,
+    };
+    const existedItem = Like.find((liked) => liked.id === newLike.id);
+    if (existedItem) {
+      console.log(newLike.id + ": Duplicate");
+      this.removeMovie();
+    } else {
+      this.setState({
+        Like: [...this.state.Like, newLike],
+      });
+      console.log("not Duplicate");
+      this.removeMovie();
+    }
+  }
+  removeMovie() {
+    const { Movie } = this.state;
+    const oldRemove = this.state.removeId;
+    const newRemove = Movie.id;
+    this.setState({
+      removeId: [...oldRemove, newRemove],
+      Liked: true,
+    });
+    // this.updateListing();
+  }
+  checkLike(ID) {
+    const { Like } = this.state;
+    const existedItem = Like.some((liked) => liked.id == ID);
+    console.log(existedItem);
+    this.setState({
+      Liked: existedItem,
+    });
   }
 
   render() {
@@ -184,7 +239,25 @@ class MovieDetails extends Component {
               })}
             </div>
           </div>
+          <div className="Streaming">
+            {this.state.StreamName.map((item, i) => {
+              return (
+                <a className="StreamingLink" href={this.state.StreamLink}>
+                  {item}
+                </a>
+              );
+            })}
+          </div>
           <div className="DescD">{this.state.Movie.overview}</div>
+          {!this.state.Liked ? (
+            <div className="LikeDets">
+              <button className="" onClick={() => this.likeMovie()}>
+                <img className="LikeImg" src={like} />
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="CastD">
             {this.state.Cast.map((item, i) => {
               return (

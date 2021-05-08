@@ -1,0 +1,48 @@
+.SearchBox{
+    width: 70vw;
+    margin-bottom: 5vw;
+}
+.grid-containerSearch {
+    color: white;
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: max-content;
+    align-content: center;
+    gap: 0px 1vw;
+    margin-bottom: 2vw;
+    grid-template-areas:
+      ". Movie .";
+  }
+  .MovieS {
+    text-decoration: none;
+    color: white;
+    border: 1px solid white;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: max-content max-content 1fr;
+    gap: 0.4vw 0px;
+    grid-template-areas:
+      "Poster Title"
+      "Poster Genre"
+      "Poster Desc";
+    grid-area: Movie;
+  }
+  
+  .TitleS { 
+      grid-area: Title;
+      font-weight: 800; 
+      font-size: 7vw;
+    }
+  .GenreS { 
+      grid-area: Genre; 
+      font-weight: 100;
+      font-size: 3vw;
+    }
+  .DescS {
+       grid-area: Desc; 
+       font-size: 3vw;
+    }
+  .PosterS { 
+      grid-area: Poster; 
+      width: 30vw;
+}

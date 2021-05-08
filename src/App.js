@@ -10,6 +10,8 @@ import Movie from "./Movie";
 import Nav from "./Nav";
 import MovieDetails from "./MovieDetails";
 import ActorDetails from "./ActorDetails";
+import Search from "./Search";
+
 function App() {
   return (
     <div className="App">
@@ -57,7 +59,7 @@ function App() {
                 <div>
                   <Nav PageTitle="Search" />
                   <h1 className="Title">Search</h1>
-                  {/* <Search /> */}
+                  <Search />
                 </div>
               );
             }}

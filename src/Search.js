@@ -8,6 +8,10 @@ class Search extends Component {
     this.state = {
       Search: "",
       Movie: [],
+      Person: [],
+      SearchId: 0,
+      SearchVal: [{ searchBy: "movie" }, { searchBy: "person" }],
+      SearchIdSubmit: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,30 +28,66 @@ class Search extends Component {
   async API() {
     const key = "c34103da5fd71089818f7dce45ac6a4f";
     const url =
-      "https://api.themoviedb.org/3/search/movie?api_key=" +
+      "https://api.themoviedb.org/3/search/" +
+      this.state.SearchVal[this.state.SearchId].searchBy +
+      "?api_key=" +
       key +
       "&language=en-gb&query=" +
-      this.state.Search +
+      encodeURI(this.state.Search) +
       "&page=1&include_adult=false";
     console.log(url);
     const response = await fetch(url);
     const data = await response.json();
-    this.setState({
-      Movie: data,
-    });
-    console.log(this.state.Movie);
+    if (this.state.SearchId === 0) {
+      this.setState({
+        Movie: data,
+        SearchIdSubmit: 0,
+        Person: [],
+      });
+      console.log(this.state.Movie);
+    } else {
+      this.setState({
+        Person: data,
+        SearchIdSubmit: 1,
+        Movie: [],
+      });
+      console.log(this.state.Person);
+    }
   }
-  handleDetails(i) {
-    const { Movie } = this.state;
-    <Route path={"/" + Movie.results[i].id} />;
+  handleDetails(i, Id) {
+    const { Movie, Person } = this.state;
+    if (Id === 0) {
+      <Route path={"/" + Movie.results[i].id} />;
+    } else {
+      <Route path={"/" + Person.results[i].id} />;
+    }
   }
   GetImage(Location) {
     return "https://image.tmdb.org/t/p/w500" + Location;
+  }
+  GetSearch(Id) {
+    this.setState({ SearchId: Id });
   }
   render() {
     return (
       <div>
         <div>
+          <div className="MovieBtn">
+            <button
+              className={this.state.SearchId === 1 ? "SearchBtn" : "SearchBtnS"}
+              onClick={() => this.GetSearch(0)}
+            >
+              Movie
+            </button>
+          </div>
+          <div className="PeopleBtn">
+            <button
+              className={this.state.SearchId === 0 ? "SearchBtn" : "SearchBtnS"}
+              onClick={() => this.GetSearch(1)}
+            >
+              People
+            </button>
+          </div>
           <form onSubmit={this.handleSubmit}>
             <input
               className="SearchBox"
@@ -60,28 +100,69 @@ class Search extends Component {
           </form>
         </div>
         <div>
-          {this.state.Movie.results
-            ? this.state.Movie.results.map((item, i) => {
-                return (
-                  <div>
-                    <div class="grid-containerSearch">
-                      <Link
-                        to={"/Info/" + item.id}
-                        class="MovieS"
-                        onClick={() => this.handleDetails(i)}
-                      >
-                        <div class="TitleS">{item.title}</div>
-                        <div class="DescS">{item.overview}</div>
-                        <img
-                          class="PosterS"
-                          src={this.GetImage(item.poster_path)}
-                        />
-                      </Link>
+          {this.state.SearchIdSubmit === 0 ? (
+            <div>
+              {this.state.Movie.results
+                ? this.state.Movie.results.map((item, i) => {
+                    return (
+                      <div>
+                        <div class="grid-containerSearch">
+                          <Link
+                            to={"/Info/" + item.id}
+                            class="MovieS"
+                            onClick={() =>
+                              this.handleDetails(i, this.state.SearchIdSubmit)
+                            }
+                          >
+                            <div class="TitleS">{item.title}</div>
+                            <div class="DescS">{item.overview}</div>
+                            <img
+                              class="PosterS"
+                              src={this.GetImage(item.poster_path)}
+                              alt="Poster"
+                            />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })
+                : ""}
+            </div>
+          ) : this.state.Person.results ? (
+            this.state.Person.results.map((item, i) => {
+              return (
+                <div class="grid-containerPersonSearch">
+                  <Link
+                    to={"/People/" + item.id}
+                    class="PersonS"
+                    onClick={() =>
+                      this.handleDetails(i, this.state.SearchIdSubmit)
+                    }
+                  >
+                    <div class="TitleP">{item.name}</div>
+                    <div class="KnownP">
+                      {item.known_for.map((item, i) => {
+                        return (
+                          <div>
+                            {item.original_title
+                              ? item.original_title
+                              : item.name}
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                );
-              })
-            : console.log("No Liked Movies")}
+                    <img
+                      class="PosterS"
+                      src={this.GetImage(item.profile_path)}
+                      alt="Actor"
+                    />
+                  </Link>
+                </div>
+              );
+            })
+          ) : (
+            ""
+          )}
         </div>
       </div>
     );

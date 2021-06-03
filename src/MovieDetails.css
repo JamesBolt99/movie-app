@@ -69,8 +69,35 @@
 }
 .LikeDets{
     grid-area: LikeDets;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-template-rows: 20vw ;
+    /* gap: 25vw 1vw; */
+    grid-template-areas: ". LikeIcon SimilarLike Similar .";
 }
+.LikeIcon{
+    grid-area: LikeIcon;
+    padding: 0;
+    background:transparent;
+}
+.LikeIconD{
+    width: 20vw;
+    height: 20vw;
+    background-color: black;
 
+}
+.Similar{
+    grid-area: Similar;
+   display: flex;
+   justify-content: center;
+  align-items: center;
+}
+.SimilarLike{
+    grid-area: SimilarLike;
+    display: flex;
+    justify-content: center;
+   align-items: center;
+}
 .CastD {
     grid-area: CastD;
     display: grid;
@@ -89,8 +116,8 @@
     font-size: 3vw;
     text-decoration: none;
     color: black;
-    background-color: white;
-    border: 10px solid white;
+    /* background-color: white;
+    border: 10px solid white; */
 }
 
   
@@ -119,4 +146,15 @@
 .ActorPicD {
     grid-area: ActorPicD;
     height: 30vw;
+}
+.StreamIcon{
+    width: 40vw;
+}
+.SimilarLink{
+    background: black;
+    border: 3px solid white;
+    text-decoration: none;
+    color: white;
+    padding: 5vw;
+    font-size: 5vw;
 }

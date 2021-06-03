@@ -5,7 +5,9 @@
     height: 10vw;
 }
 .PageTitle{
-
+    font-size: 10vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 .Bttn {
     background-color: transparent;
@@ -23,7 +25,7 @@
     background-color: #262626;
     height: 15vw ;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 .menu-bars{
@@ -36,7 +38,7 @@
 .nav-menu{
     display: block;
     background-color: #262626;
-    width: 40vw;
+    width: 45vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -53,7 +55,7 @@
 }
 .nav-text{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     padding: 1vw 0px 1vw 1vw;
     list-style: none;
@@ -81,7 +83,7 @@
     width: 100%;
     height: 10vw;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 span {

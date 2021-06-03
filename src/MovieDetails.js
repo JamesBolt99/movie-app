@@ -3,8 +3,10 @@ import "./MovieDetails.css";
 import Moment from "moment";
 import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
-import Netflix from "./Img/netflix.jpg";
 import like from "./Img/like.png";
+import Netflix from "./Img/Prov/netflix.jpg";
+import Disney from "./Img/Prov/disney.png";
+import Prime from "./Img/Prov/prime.png";
 
 class MovieDetails extends Component {
   constructor(props) {
@@ -22,17 +24,17 @@ class MovieDetails extends Component {
       StreamLink: [],
       Provider: [
         {
-          title: "hbo",
-        },
-        {
           title: "netflix",
-          icon: <img src={Netflix} className="StreamIcon" />,
+          icon: <img src={Netflix} className="StreamIcon" alt="Icon" />,
           cName: "Provider",
         },
-        { title: "hulu" },
         {
           title: "disney",
-          icon: <img src={Netflix} className="StreamIcon" />,
+          icon: <img src={Disney} className="StreamIcon" alt="Icon" />,
+        },
+        {
+          title: "prime",
+          icon: <img src={Prime} className="StreamIcon" alt="Icon" />,
         },
       ],
       Like: JSON.parse(localStorage.getItem("Like")),
@@ -41,7 +43,7 @@ class MovieDetails extends Component {
     };
     this.GetImage = this.GetImage.bind(this);
   }
-  async componentDidMount() {
+  componentDidMount() {
     this.MovieApi();
     this.checkLike(this.state.MovieId);
   }
@@ -107,21 +109,26 @@ class MovieDetails extends Component {
     console.log(this.state.Trailer);
   }
   async CastAPI() {
-    for (var i = 0; i < 8; i++) {
-      const key = "c34103da5fd71089818f7dce45ac6a4f";
-      const url =
-        "https://api.themoviedb.org/3/movie/" +
-        this.state.MovieId +
-        "/credits?api_key=" +
-        key +
-        "&language=en-US";
-      console.log(url);
-      const response = await fetch(url);
-      const data = await response.json();
+    const key = "c34103da5fd71089818f7dce45ac6a4f";
+    const url =
+      "https://api.themoviedb.org/3/movie/" +
+      this.state.Movie.id +
+      "/credits?api_key=" +
+      key +
+      "&language=en-GB";
+    console.log(url);
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    var castAmount = 8;
+    if (data.cast.length <= 8) {
+      castAmount = data.cast.length;
+    }
+    for (var i = 0; i < castAmount; i++) {
       const newCast = data.cast[i];
-      console.log(data);
       this.setState({ Cast: [...this.state.Cast, newCast] });
     }
+    console.log(this.state.Cast);
   }
   GetImage(Location) {
     return "https://image.tmdb.org/t/p/w500" + Location;
@@ -137,7 +144,7 @@ class MovieDetails extends Component {
     const dataLogo = await response.json();
     console.log(dataLogo);
     this.setState({ Streaming: dataLogo.results.GB });
-    if (this.state.streaming !== undefined) {
+    if (this.state.Streaming !== undefined) {
       if (this.state.Streaming.flatrate) {
         this.AvailabilityAPI();
         console.log("Stream Available");
@@ -150,7 +157,7 @@ class MovieDetails extends Component {
     const url =
       "https://streaming-availability.p.rapidapi.com/get/basic?rapidapi-key=" +
       key +
-      "&country=gb&tmdb_id=movie%2F" +
+      "&country=GB&tmdb_id=movie%2F" +
       this.state.MovieId;
     const response = await fetch(url);
     const data = await response.json();
@@ -194,7 +201,8 @@ class MovieDetails extends Component {
       this.removeMovie();
     }
   }
-  removeMovie() {
+
+  removeMovie(bool) {
     const { Movie } = this.state;
     const oldRemove = this.state.removeId;
     const newRemove = Movie.id;
@@ -205,8 +213,9 @@ class MovieDetails extends Component {
     // this.updateListing();
   }
   checkLike(ID) {
-    const { Like } = this.state;
-    const existedItem = Like.some((liked) => liked.id == ID);
+    const existedItem = this.state.Like.some(
+      (liked) => JSON.stringify(liked.id) === ID
+    );
     console.log(existedItem);
     this.setState({
       Liked: existedItem,
@@ -219,18 +228,20 @@ class MovieDetails extends Component {
         <img
           className="BackDrop"
           src={this.GetImage(this.state.Movie.backdrop_path)}
+          alt="BackDrop"
         />
 
         <div className="grid-containerD">
           <div className="TopD">
             <div className="TitleD">{this.state.Movie.title}</div>
             <div className="ReleaseD">
-              {Moment(this.state.Movie.release_date).format("d-MMM-yy")}
+              {Moment(this.state.Movie.release_date).format("D-MMM-yy")}
             </div>
             <div className="PosterD">
               <img
                 className="Poster"
                 src={this.GetImage(this.state.Movie.poster_path)}
+                alt="Poster"
               />
             </div>
             <div className="GenreD">
@@ -240,23 +251,50 @@ class MovieDetails extends Component {
             </div>
           </div>
           <div className="Streaming">
-            {this.state.StreamName.map((item, i) => {
-              return (
-                <a className="StreamingLink" href={this.state.StreamLink}>
-                  {item}
-                </a>
-              );
-            })}
+            {this.state.StreamName !== undefined
+              ? this.state.StreamName.map((item, i) => {
+                  return (
+                    <a className="StreamingLink" href={this.state.StreamLink}>
+                      {this.state.Provider.find((i) => i.title === item)
+                        ? this.state.Provider.find((i) => i.title === item)
+                            .icon !== undefined
+                          ? this.state.Provider.find((i) => i.title === item)
+                              .icon
+                          : item
+                        : item}
+                    </a>
+                  );
+                })
+              : ""}
           </div>
           <div className="DescD">{this.state.Movie.overview}</div>
           {!this.state.Liked ? (
             <div className="LikeDets">
-              <button className="" onClick={() => this.likeMovie()}>
-                <img className="LikeImg" src={like} />
-              </button>
+              <div className="LikeIcon">
+                <button className="LikeIcon" onClick={() => this.likeMovie()}>
+                  <img className="LikeIconD" src={like} alt="LikeIcon" />
+                </button>
+              </div>
+              <div className="Similar">
+                <Link
+                  to={"/Similar/" + this.state.Movie.id}
+                  className="SimilarLink"
+                >
+                  Similar Movies
+                </Link>
+              </div>
             </div>
           ) : (
-            ""
+            <div className="LikeDets">
+              <div className="SimilarLike">
+                <Link
+                  to={"/Similar/" + this.state.Movie.id}
+                  className="SimilarLink"
+                >
+                  Similar Movies
+                </Link>
+              </div>
+            </div>
           )}
           <div className="CastD">
             {this.state.Cast.map((item, i) => {
@@ -268,6 +306,7 @@ class MovieDetails extends Component {
                     <img
                       className="ActorPicD"
                       src={this.GetImage(item.profile_path)}
+                      alt="ActorPic"
                     />
                   ) : (
                     "No Image"

@@ -5,24 +5,33 @@ import Cancel from "./Img/cancel.png";
 import { useState } from "react";
 import { SidebarData } from "./NavData";
 
-function Nav() {
+function Nav(props) {
   const [sidebar, setSidebar] = useState(false);
-  // const PageTitle = props;
 
   const showSidebar = () => setSidebar(!sidebar);
   return (
     <>
       <div className="navbar">
         <Link to="#" className="menu-bars">
-          <img className="BttnImg" src={Menu} onClick={showSidebar} />
+          <img
+            className="BttnImg"
+            src={Menu}
+            onClick={showSidebar}
+            alt="ButtonImage"
+          />
         </Link>
-        {/* <h1 className="PageTitle">{PageTitle}</h1> */}
+        <h1 className="PageTitle">{props.PageTitle}</h1>
       </div>
       <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
         <ul className="nav-menu-items">
           <li className="navbar-toggle">
             <Link to="#" className="menu-bars">
-              <img className="BttnImg" src={Cancel} onClick={showSidebar} />
+              <img
+                className="BttnImg"
+                src={Cancel}
+                onClick={showSidebar}
+                alt="ButtonIcon"
+              />
             </Link>
           </li>
           {SidebarData.map((item, i) => {

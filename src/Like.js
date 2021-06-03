@@ -7,6 +7,7 @@ class Like extends Component {
     super(props);
     this.state = {
       Like: [],
+      isOldestFirst: true,
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.GetImage = this.GetImage.bind(this);
@@ -48,11 +49,20 @@ class Like extends Component {
   GetImage(Location) {
     return "https://image.tmdb.org/t/p/w500" + Location;
   }
+  // sortByDate() {
+  //   if (this.state.isOldestFirst) {
+  //     newLikeList.sort((a, b) => a.DateTime < b.DateTime);
+  //   } else {
+  //     newLikeList.sort((a, b) => a.DateTime > b.DateTime);
+  //   }
+  // }
+
   render() {
     return (
       <div className="App">
-        {this.state.Like
-          ? this.state.Like.map((item, i) => {
+        {this.state.Like ? (
+          <div>
+            {this.state.Like.map((item, i) => {
               return (
                 <div>
                   <div class="grid-containerLike">
@@ -63,7 +73,11 @@ class Like extends Component {
                     >
                       <div class="TitleL">{item.Name}</div>
                       <div class="DescL">{item.Desc}</div>
-                      <img class="PosterL" src={this.GetImage(item.Image)} />
+                      <img
+                        class="PosterL"
+                        src={this.GetImage(item.Image)}
+                        alt="Poster"
+                      />
                     </Link>
                     <button
                       className="Del"
@@ -74,8 +88,11 @@ class Like extends Component {
                   </div>
                 </div>
               );
-            })
-          : console.log("No Liked Movies")}
+            })}
+          </div>
+        ) : (
+          "No Liked Movies"
+        )}
       </div>
     );
   }

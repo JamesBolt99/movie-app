@@ -27,13 +27,14 @@ body{
 }
 .grid-container {
   align-content: center;
+  background: black;
   color: white;
   display: grid;
   grid-template-columns: 1vw auto 1vw;
-  grid-template-rows: 5%  max-content max-content max-content max-content max-content max-content;
+  grid-template-rows: max-content max-content max-content max-content max-content max-content;
   gap: 0px 20px;
   grid-template-areas:
-  ". . ."
+  
     /* ". Search ." */
     ". Title ."
     ". Video ."
@@ -42,6 +43,7 @@ body{
     ". Genre ."
     ". Cast ."
     ". Rate .";
+    
 }
 
 .Search { 
@@ -52,6 +54,7 @@ body{
   grid-area: Title;
   font-size: 5vw;
   font-weight: 700;
+  font-size: 10vw;
 }
 
 .Cast {
@@ -72,7 +75,7 @@ body{
 }
 .Rating {
   grid-area: Rating;
-  font-size: 3vw;
+  font-size: 5vw;
 }
 .Genre { 
   grid-area: Genre;
@@ -124,6 +127,7 @@ body{
   left: 50vw;
   position: absolute;
   top: 60vw;
+  z-index: -1;
 }
 .SwipeImageR{
   display: block;
@@ -131,4 +135,13 @@ body{
   position: absolute;
   left: 5vw;
   top: 60vw;
+  z-index: -1;
+}
+.basic-swipeable-list__item-content-left{
+  background-color: red;
+}
+.AppMovie{
+  height: 80vw;
+  position: absolute;
+  background-color: black;
 }

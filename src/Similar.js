@@ -4,13 +4,13 @@ import ReactPlayer from "react-player";
 import like from "./Img/like.png";
 import dislike from "./Img/dislike.png";
 import { Link } from "react-router-dom";
-
 import { SwipeableListItem } from "@sandstreamdev/react-swipeable-list";
 
-class Home extends Component {
+class Similar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      MovieId: window.location.pathname.replace("/Similar/", ""),
       Movie: {},
       Trailer: [],
       Ratings: [],
@@ -42,6 +42,8 @@ class Home extends Component {
       ],
       GenreName: [],
       Swipe: 0,
+      undefCount: 0,
+      Listing: true,
     };
   }
   GetRand(min, max) {
@@ -81,27 +83,44 @@ class Home extends Component {
 
   async updateListing() {
     const randomUrl =
-      "https://api.themoviedb.org/3/movie/popular?api_key=c34103da5fd71089818f7dce45ac6a4f&language=en-GB&page=" +
+      "https://api.themoviedb.org/3/movie/" +
+      this.state.MovieId +
+      "/similar?api_key=c34103da5fd71089818f7dce45ac6a4f&language=en-GB&page=" +
       this.GetRand(1, 4);
     const responseRand = await fetch(randomUrl);
     const randomdata = await responseRand.json();
     console.log(randomdata);
-    this.setState({ Movie: randomdata.results[this.GetRand(0, 20)] });
-    console.log(this.state.Movie);
-    if (
-      this.state.removeId.includes(this.state.Movie.id) ||
-      this.state.Movie === null
-    ) {
-      this.updateListing();
+    console.log(randomUrl);
+    const Rand = this.GetRand(0, randomdata.results.length);
+    if (randomdata.results[Rand] === undefined) {
+      if (this.state.undefCount < 10) {
+        console.log("Movie Undefined");
+        this.setState({ undefCount: this.state.undefCount + 1 });
+        this.updateListing();
+      } else {
+        console.log("No Listings");
+        this.setState({ Listing: false }); //BOOL to display a blank message for no similar movies
+      }
     } else {
       this.setState({
-        Cast: [],
-        Trailer: [],
-        GenreName: [],
+        Movie: randomdata.results[Rand],
       });
-      this.TrailerAPI();
-      this.CastAPI();
-      this.GenreAPI();
+      console.log(this.state.Movie);
+      if (
+        this.state.removeId.includes(this.state.Movie.id) ||
+        this.state.Movie === null
+      ) {
+        this.updateListing();
+      } else {
+        this.setState({
+          Cast: [],
+          Trailer: [],
+          GenreName: [],
+        });
+        this.TrailerAPI();
+        this.CastAPI();
+        this.GenreAPI();
+      }
     }
   }
   async TrailerAPI() {
@@ -176,20 +195,19 @@ class Home extends Component {
       Desc: this.state.Movie.overview,
       Image: this.state.Movie.poster_path,
     };
-
     const existedItem = Like.find((liked) => liked.id === newLike.id);
     if (existedItem) {
       console.log(newLike.id + ": Duplicate");
-      this.removeMovie();
+      this.removeMovie(false);
     } else {
       this.setState({
         Like: [...this.state.Like, newLike],
       });
       console.log("not Duplicate");
-      this.removeMovie();
+      this.removeMovie(true);
     }
   }
-  removeMovie() {
+  removeMovie(bool) {
     const { Movie } = this.state;
     const newRemove = Movie.id;
     this.setState({ removeId: [...this.state.removeId, newRemove] });
@@ -201,77 +219,95 @@ class Home extends Component {
 
   render() {
     return (
-      <SwipeableListItem
-        swipeRight={{
-          content: (
-            <span className=".basic-swipeable-list__item-content-left">
-              <img className="SwipeImageR" src={like} alt="LikeIcon" />
-            </span>
-          ),
-          action: () => this.likeMovie(),
-        }}
-        swipeLeft={{
-          content: (
-            <div>
-              <img className="SwipeImageL" src={dislike} alt="DislikeIcon" />
+      <div>
+        {this.state.Listing ? (
+          <SwipeableListItem
+            swipeRight={{
+              content: (
+                <span className=".basic-swipeable-list__item-content-left">
+                  <img className="SwipeImageR" src={like} alt="LikeIcon" />
+                </span>
+              ),
+              action: () => this.likeMovie(),
+            }}
+            swipeLeft={{
+              content: (
+                <div>
+                  <img
+                    className="SwipeImageL"
+                    src={dislike}
+                    alt="DislikeIcon"
+                  />
+                </div>
+              ),
+              action: () => this.removeMovie(false),
+            }}
+            onSwipeEnd={() => this.likeMovie}
+          >
+            <div className="AppMovie">
+              <div className="grid-container">
+                {/* <div className="Search">Search</div> */}
+                <div className="Video">
+                  <ReactPlayer
+                    url={this.state.Trailer[0]}
+                    width="90vw"
+                    height="51vw"
+                    playing={true}
+                  />
+                </div>
+                <div className="Title">
+                  <Link
+                    to={"/Info/" + this.state.Movie.id}
+                    className="LinkDecor"
+                  >
+                    {this.state.Movie.title}
+                  </Link>
+                </div>
+                <div className="Rating"></div>
+                <div className="Genre">
+                  {this.state.GenreName.map((item) => {
+                    return <div>{item}</div>;
+                  })}
+                </div>
+                <div className="Cast">
+                  {this.state.Cast.map((item) => {
+                    return (
+                      <div>
+                        <div className="Actor">{item.name}</div>
+                        {item.profile_path ? (
+                          <img
+                            className="Pic1"
+                            src={this.GetImage(item.profile_path)}
+                            alt="ActorImage"
+                          />
+                        ) : (
+                          "No Image"
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="Rate">
+                  <button className="Like" onClick={() => this.likeMovie()}>
+                    <img className="LikeImg" src={like} alt="LikeIcon" />
+                  </button>
+                  <button
+                    className="Dislike"
+                    onClick={() => this.removeMovie(false)}
+                  >
+                    <img className="LikeImg" src={dislike} alt="DislikeIcon" />
+                  </button>
+                </div>
+              </div>
             </div>
-          ),
-          action: () => this.removeMovie(),
-        }}
-        onSwipeEnd={() => this.likeMovie}
-      >
-        <div className="AppMovie">
-          <div className="grid-container">
-            {/* <div className="Search">Search</div> */}
-            <div className="Video">
-              <ReactPlayer
-                url={this.state.Trailer[0]}
-                width="90vw"
-                height="51vw"
-                playing={true}
-              />
-            </div>
-            <div className="Title">
-              <Link to={"/Info/" + this.state.Movie.id} className="LinkDecor">
-                {this.state.Movie.title}
-              </Link>
-            </div>
-            <div className="Rating"></div>
-            <div className="Genre">
-              {this.state.GenreName.map((item) => {
-                return <div>{item}</div>;
-              })}
-            </div>
-            <div className="Cast">
-              {this.state.Cast.map((item) => {
-                return (
-                  <div>
-                    <div className="Actor">{item.name}</div>
-                    {item.profile_path ? (
-                      <img
-                        className="Pic1"
-                        src={this.GetImage(item.profile_path)}
-                        alt="ActorImage"
-                      />
-                    ) : (
-                      "No Image"
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="Rate">
-              <button className="Like" onClick={() => this.likeMovie()}>
-                <img className="LikeImg" src={like} alt="LikeIcon" />
-              </button>
-              <button className="Dislike" onClick={() => this.removeMovie()}>
-                <img className="LikeImg" src={dislike} alt="DislikeIcon" />
-              </button>
-            </div>
+          </SwipeableListItem>
+        ) : (
+          <div className="Title" style={{ color: "white" }}>
+            No Similar Movies
           </div>
-        </div>
-      </SwipeableListItem>
+        )}
+      </div>
     );
   }
 }
-export default Home;
+export default Similar;

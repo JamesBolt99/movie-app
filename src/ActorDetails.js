@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import "./ActorDetails.css";
-import Moment from "moment";
-import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
 
 class ActorDetails extends Component {

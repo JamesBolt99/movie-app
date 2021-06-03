@@ -1,7 +1,19 @@
 .SearchBox{
-    width: 70vw;
+    width: 60vw;
     margin-bottom: 5vw;
+    margin-top: 2vw;
+    font-size: 5vw;
+    display: inline;
 }
+.Submit{
+  /* height: 6vw; */
+  margin-bottom: 5vw;
+  margin-top: 2vw;
+  font-size: 5vw;
+  display: inline;
+
+}
+
 .grid-containerSearch {
     color: white;
     display: grid;
@@ -10,8 +22,9 @@
     align-content: center;
     gap: 0px 1vw;
     margin-bottom: 2vw;
+    
     grid-template-areas:
-      ". Movie .";
+      ". MovieS .";
   }
   .MovieS {
     text-decoration: none;
@@ -25,7 +38,7 @@
       "Poster Title"
       "Poster Genre"
       "Poster Desc";
-    grid-area: Movie;
+    grid-area: MovieS;
   }
   
   .TitleS { 
@@ -46,3 +59,73 @@
       grid-area: Poster; 
       width: 30vw;
 }
+.MovieBtn{
+  color: white;
+  display: inline;
+  margin-inline: 10vw;
+  margin-top: 10vw;
+  margin-inline-end: 10vw;
+  
+}
+.PeopleBtn{
+  display: inline;
+  color: white;
+  margin-inline: 10vw;
+  margin-inline-end: 10vw;
+  }
+  .SearchBtn{
+    margin-top: 5vw;
+    margin-bottom: 5vw;
+    background-color: black;
+    color: white;
+    width: 20vw;
+    height: 10vw;
+    font-size: 5vw;
+    border: 1px solid white;
+  }
+  .SearchBtnS{
+    margin-top: 5vw;
+    margin-bottom: 5vw;
+    background-color: white;
+    color: black;
+    width: 20vw;
+    height: 10vw;
+    font-size: 5vw;
+    border: 1px solid white;
+  }
+  .grid-containerPersonSearch {
+    color: white;
+    display: inline-grid;
+    grid-template-columns: 5vw max-content 5vw;
+    grid-template-rows: max-content;
+    align-content: center;
+    gap: 0vw 0vw;
+    margin-bottom: 2vw;
+    
+    grid-template-areas:
+      ". PersonS .";
+  }
+  .PersonS {
+    text-decoration: none;
+    color: white;
+    border: 1px solid white;
+    display: grid;
+    grid-template-columns: 30vw ;
+    grid-template-rows: max-content max-content max-content;
+    gap: 0.4vw 0px;
+    grid-template-areas:
+      "Poster"
+      "TitleP"
+      "Known"
+      ;
+    grid-area: PersonS;
+  }
+  .KnownP{
+    grid-area: Known;
+    font-size: 3vw;
+  }
+  .TitleP{
+    grid-area: TitleP;
+    font-weight: 800; 
+      font-size: 5vw;
+  }
